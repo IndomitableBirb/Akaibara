@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akaibara</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  color: #f5e6c8;
+  background: radial-gradient(circle at center,
+    #3b0a0f 0%,
+    #1a0005 45%,
+    #b08d57 120%
+  );
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 215, 120, 0.08),
+    rgba(0, 0, 0, 0.65)
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── CENTER CARD — UNCHANGED ── */
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  padding: 60px 50px;
+  width: 360px;
+  border-radius: 28px;
+  background: rgba(10, 10, 15, 0.35);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(212,175,55,0.35);
+  box-shadow:
+    0 0 30px rgba(212,175,55,0.25),
+    0 0 80px rgba(0,0,0,0.6);
+  z-index: 2;
+}
+
+.profile {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  border: 2px solid #d4af37;
+  object-fit: cover;
+  margin-bottom: 20px;
+  box-shadow: 0 0 25px rgba(212,175,55,0.6);
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 34px;
+  color: #d4af37;
+  margin: 0;
+}
+
+.subtitle {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #ff4a5c;
+  padding: 6px 14px;
+  margin-top: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 74, 92, 0.4);
+  background: rgba(255, 74, 92, 0.08);
+}
+
+.divider {
+  width: 70px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #d4af37, transparent);
+  margin: 22px auto;
+}
+
+p {
+  font-style: italic;
+  margin: 0;
+}
+
+/* ── LEFT PANEL — COMPACT ── */
+.left-panel {
+  position: fixed;
+  left: 2.5%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 230px;
+  padding: 20px 18px;
+  background: rgba(10, 10, 15, 0.22);
+  backdrop-filter: blur(14px);
+  border-radius: 16px;
+  border: 1.5px solid rgba(212,175,55,0.35);
+  box-shadow:
+    inset 0 0 14px rgba(212,175,55,0.06),
+    0 0 20px rgba(0,0,0,0.35);
+  font-family: "Playfair Display", serif;
+  z-index: 1;
+}
+
+.left-panel::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 10px;
+  border: 1px solid rgba(212,175,55,0.15);
+  pointer-events: none;
+}
+
+.left-ornament-top,
+.left-ornament-bottom {
+  text-align: center;
+  color: #d4af37;
+  font-size: 14px;
+  letter-spacing: 3px;
+  opacity: 0.5;
+  margin: 4px 0;
+}
+
+.left-title {
+  color: #d4af37;
+  font-size: 11px;
+  letter-spacing: 2px;
+  margin: 10px 0 6px 0;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.left-text {
+  font-size: 11px;
+  opacity: 0.8;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  color: #f5e6c8;
+  font-style: italic;
+}
+
+.left-divider {
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #d4af37, transparent);
+  margin: 8px auto;
+  opacity: 0.4;
+}
+
+.left-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 6px 0;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: rgba(212, 175, 55, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.12);
+}
+
+.left-stat-label {
+  font-size: 9px;
+  color: #d4af37;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.left-stat-value {
+  font-size: 9px;
+  color: #ff4a5c;
+  font-weight: 600;
+}
+
+.left-quote-box {
+  margin-top: 10px;
+  padding: 10px;
+  border-left: 2px solid rgba(212, 175, 55, 0.35);
+  background: rgba(255, 74, 92, 0.03);
+  border-radius: 0 8px 8px 0;
+}
+
+.left-quote-text {
+  font-size: 10px;
+  color: #f5e6c8;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.left-quote-author {
+  font-size: 9px;
+  color: #d4af37;
+  margin-top: 6px;
+  text-align: right;
+  letter-spacing: 1px;
+}
+
+/* ── RIGHT PANEL — COMPACT & TIGHT ── */
+.right-panel {
+  position: fixed;
+  right: 2.5%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 1;
+}
+
+.rose-card {
+  width: 100%;
+  padding: 12px 10px;
+  text-align: center;
+  background: rgba(10, 10, 15, 0.22);
+  backdrop-filter: blur(14px);
+  border-radius: 12px;
+  border: 1px solid rgba(212,175,55,0.28);
+  box-shadow:
+    inset 0 0 10px rgba(212,175,55,0.05),
+    0 0 15px rgba(0,0,0,0.25);
+  transition: all 0.4s ease;
+}
+
+.rose-card:hover {
+  border-color: rgba(212,175,55,0.5);
+  box-shadow:
+    inset 0 0 14px rgba(212,175,55,0.1),
+    0 0 25px rgba(212,175,55,0.12);
+  transform: translateY(-3px);
+}
+
+.rose {
+  font-size: 26px;
+  filter: drop-shadow(0 0 8px rgba(212,175,55,0.25));
+  animation: floatRose 5s ease-in-out infinite;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.rose-card:nth-child(2) .rose { animation-delay: 1s; }
+.rose-card:nth-child(3) .rose { animation-delay: 2s; }
+
+@keyframes floatRose {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.rose-label {
+  font-family: "Playfair Display", serif;
+  font-size: 10px;
+  color: #d4af37;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.rose-desc {
+  font-size: 9px;
+  color: #f5e6c8;
+  opacity: 0.65;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+.right-ornament-line {
+  width: 1px;
+  height: 18px;
+  background: linear-gradient(to bottom, transparent, #d4af37, transparent);
+  opacity: 0.35;
+}
+
+.right-accent {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ff4a5c;
+  box-shadow: 0 0 6px rgba(255, 74, 92, 0.4);
+}
+
+/* ── PARTICLES ── */
+.particle {
+  position: fixed;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.12);
+  pointer-events: none;
+  z-index: 0;
+  animation: floatParticle 12s ease-in-out infinite;
+}
+
+@keyframes floatParticle {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.25; }
+  25% { transform: translateY(-25px) translateX(12px); opacity: 0.5; }
+  50% { transform: translateY(-12px) translateX(-8px); opacity: 0.35; }
+  75% { transform: translateY(-35px) translateX(4px); opacity: 0.45; }
+}
+
+/* ═══════════════════════════════════════ */
+/* 📱 MOBILE RESPONSIVE — STACKED LAYOUT   */
+/* ═══════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .left-panel,
+  .right-panel {
+    position: relative;
+    left: auto;
+    right: auto;
+    top: auto;
+    transform: none;
+    width: 90%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+
+  .card {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 340px;
+    padding: 40px 30px;
+  }
+
+  .profile {
+    width: 110px;
+    height: 110px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0 40px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .right-panel {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .rose-card {
+    width: 100px;
+    padding: 10px 8px;
+  }
+
+  .rose {
+    font-size: 22px;
+  }
+
+  .rose-label {
+    font-size: 9px;
+  }
+
+  .rose-desc {
+    display: none;
+  }
+
+  .right-ornament-line,
+  .right-accent {
+    display: none;
+  }
+
+  .left-panel {
+    margin-bottom: 10px;
+    order: -1;
+  }
+
+  .left-stat-row {
+    padding: 4px 8px;
+  }
+
+  .left-stat-label,
+  .left-stat-value {
+    font-size: 8px;
+  }
+
+  .left-quote-box {
+    padding: 8px;
+  }
+
+  .left-quote-text {
+    font-size: 9px;
+  }
+
+  .left-quote-author {
+    font-size: 8px;
+  }
+
+  .left-text {
+    font-size: 10px;
+  }
+
+  .left-title {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 30px 20px;
+  }
+
+  .profile {
+    width: 90px;
+    height: 90px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 10px;
+    padding: 4px 10px;
+  }
+
+  .left-panel,
+  .right-panel {
+    width: 92%;
+  }
+
+  .rose-card {
+    width: 85px;
+    padding: 8px 6px;
+  }
+
+  .rose {
+    font-size: 20px;
+  }
+}
+</style>
+<base target="_blank">
+</head>
+
+<body>
+
+<div class="overlay"></div>
+
+<div class="particle" style="width:4px;height:4px;left:8%;top:15%;animation-delay:0s;"></div>
+<div class="particle" style="width:3px;height:3px;left:12%;top:55%;animation-delay:2s;"></div>
+<div class="particle" style="width:5px;height:5px;left:5%;top:75%;animation-delay:4s;"></div>
+<div class="particle" style="width:3px;height:3px;right:10%;top:18%;animation-delay:1s;"></div>
+<div class="particle" style="width:4px;height:4px;right:7%;top:60%;animation-delay:3s;"></div>
+<div class="particle" style="width:3px;height:3px;right:15%;top:80%;animation-delay:5s;"></div>
+
+<!-- LEFT PANEL -->
+<div class="left-panel">
+  <div class="left-ornament-top">&#10022; &#10022; &#10022;</div>
+
+  <div class="left-title">Era</div>
+  <div class="left-text">Fragments of a fading golden era.</div>
+
+  <div class="left-divider"></div>
+
+  <div class="left-title">Silence</div>
+  <div class="left-text">Between silence and eternity.</div>
+
+  <div class="left-divider"></div>
+
+  <div class="left-title">Memory</div>
+  <div class="left-text">"What is lost is never truly gone."</div>
+
+  <div class="left-divider"></div>
+
+  <div class="left-stat-row">
+    <span class="left-stat-label">Origin</span>
+    <span class="left-stat-value">Eternal</span>
+  </div>
+  <div class="left-stat-row">
+    <span class="left-stat-label">Bloom</span>
+    <span class="left-stat-value">Crimson</span>
+  </div>
+  <div class="left-stat-row">
+    <span class="left-stat-label">Era</span>
+    <span class="left-stat-value">Golden</span>
+  </div>
+
+  <div class="left-quote-box">
+    <div class="left-quote-text">"In every ending, there is a beginning wrapped in gold and stained with red."</div>
+    <div class="left-quote-author">&mdash; Akaibara</div>
+  </div>
+
+  <div class="left-ornament-bottom">&#10022; &#10022; &#10022;</div>
+</div>
+
+<!-- CENTER CARD -->
+<div class="card">
+  <img src="https://media1.tenor.com/m/mc0r81qtLdMAAAAd/mariqini-tiktok-mariqini.gif" class="profile">
+
+  <h1>Akaibara</h1>
+  <div class="subtitle">&#36196;&#12356;&#34196;&#34183; &#8226; Red Rose</div>
+
+  <div class="divider"></div>
+
+  <p>"I love you in every Universe"</p>
+</div>
+
+<!-- RIGHT PANEL -->
+<div class="right-panel">
+  <div class="rose-card">
+    <div class="rose">&#127801;</div>
+    <div class="rose-label">Passion</div>
+    <div class="rose-desc">Burns eternal through every thread of time</div>
+  </div>
+
+  <div class="right-ornament-line"></div>
+  <div class="right-accent"></div>
+  <div class="right-ornament-line"></div>
+
+  <div class="rose-card">
+    <div class="rose">&#127801;</div>
+    <div class="rose-label">Devotion</div>
+    <div class="rose-desc">A promise written in petals of gold</div>
+  </div>
+
+  <div class="right-ornament-line"></div>
+  <div class="right-accent"></div>
+  <div class="right-ornament-line"></div>
+
+  <div class="rose-card">
+    <div class="rose">&#127801;</div>
+    <div class="rose-label">Eternity</div>
+    <div class="rose-desc">Where love transcends all boundaries</div>
+  </div>
+</div>
+
+</body>
+</html>
